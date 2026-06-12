@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História de Gugu e Gigi</title>
+    <style>
+        :root {
+            --cor-primaria: #ff4d6d;
+            --cor-primaria-hover: #ff758f;
+            --cor-texto: #590d22;
+            --cor-caixa: #ffffff;
+            --cor-sombra: rgba(89, 13, 34, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 50%, #ffe5ec 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--cor-texto);
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efeito de corações flutuantes no fundo */
+        body::before {
+            content: "❤️";
+            position: fixed;
+            top: 10%;
+            left: 5%;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: flutuar 6s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        body::after {
+            content: "💖";
+            position: fixed;
+            bottom: 15%;
+            right: 8%;
+            font-size: 2.5rem;
+            opacity: 0.15;
+            animation: flutuar 8s ease-in-out infinite alternate-reverse;
+            z-index: -1;
+        }
+
+        @keyframes flutuar {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-20px) rotate(15deg); }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 30px 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            color: var(--cor-primaria);
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .audio-player {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px var(--cor-sombra);
+        }
+
+        .audio-player p {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+        }
+
+        /* Estilo da Linha do Tempo */
+        .timeline {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--cor-primaria), #ff758f, var(--cor-primaria));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+
+        .container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .container.visible, .final-message-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container::after {
+            content: '❤️';
+            position: absolute;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            right: -13px;
+            background-color: #ffe5ec;
+            border: 3px solid var(--cor-primaria);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -13px; }
+
+        .content {
+            padding: 25px;
+            background-color: var(--cor-caixa);
+            position: relative;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px var(--cor-sombra);
+            transition: transform 0.3s ease;
+        }
+
+        .content:hover { transform: scale(1.02); }
+
+        .content h2 {
+            color: var(--cor-primaria);
+            margin-bottom: 12px;
+            font-size: 1.6rem;
+        }
+
+        .content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        .content img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: block;
+        }
+
+        .data {
+            font-weight: bold;
+            color: #800f2f;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Nova Seção: Carta Final Centralizada */
+        .final-message-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+            opacity: 0; /* Para a animação inicial */
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .final-message-content {
+            background-color: var(--cor-caixa);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px var(--cor-sombra);
+            text-align: center;
+            border-top: 6px solid var(--cor-primaria);
+        }
+
+        .final-message-content h2 {
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .final-message-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--cor-texto);
+        }
+
+        .assinatura {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--cor-primaria);
+            margin-top: 30px !important;
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 768px) {
+            header h1 { font-size: 2.3rem; }
+            .timeline::after { left: 31px; }
+            .container {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 15px;
+            }
+            .container::after { left: 18px; }
+            .right { left: 0%; }
+            .final-message-content { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nossa História ❤️</h1>
+        <p>Uma viagem pela história de Gugu e Gigi.</p>
+    </header>
+
+    <div class="audio-player">
+        <p>Eu tinha inúmeras musicas para colocar aqui, mas eu escolhi essa para ser a nossa música. Te dedico essa, minha pituca:</p>
+        <audio controls loop>
+            <source src="fotos/Serendipity (Full Length Edition) [gSsCZJM6OG0].mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <div class="timeline">
+        <div class="container left">
+            <div class="content">
+                <span class="data">Onde tudo começou</span>
+                <h2>Nossa primeira foto juntos</h2>
+                <p>Nossa primeira foto juntos. Esse dia é guardado com muito carinho na minha mente, sempre me lembro das tardes que passavamos juntos no IF. "Ainda ta cedo pra dizer que te amo??"</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.53 (1).jpeg" alt="Foto do primeiro encontro">
+            </div>
+        </div>
+
+        <div class="container right">
+            <div class="content">
+                <span class="data">Primeiro dia juntinhos fora do IF</span>
+                <h2>Nosso primeiro encontro</h2>
+                <p>Desde esse dia, o cinema se tornou algo especial para nós dois. Ainda lembro como eu estava nervoso para te ver e conhecer seus pais, e lembro-me do quão linda você estava.</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.53.jpeg" alt="Foto da viagem">
+            </div>
+        </div>
+
+        <div class="container left">
+            <div class="content">
+                <span class="data">O grande dia</span>
+                <h2>VOCÊACEITANAMORARCOMIGO???</h2>
+                <p>Dia 12/08/23, o dia que reuni coragem e te pedi em namoro na frente dos seus pais, o dia do "Vocêaceitanamorarcomigo??" ainda bem que você aceitou, porque ali foi quando eu me tornei o homem mais feliz do mundo.</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.52 (2).jpeg" alt="Foto especial">
+            </div>
+        </div>
+        
+        <div class="container right">
+            <div class="content">
+                <span class="data">Dia que fomos para pureza</span>
+                <h2>Nossa Primeira Viagem</h2>
+                <p>Pureza foi o primeiro lugar para onde viajamos. Foi um dia muito bom, onde tiramos fotos, nadamos e conhecemos um lugar juntos. E foi nesse dia que eu presenciei a ENORME quantidade de protetor solar que você usa.</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.52 (1).jpeg" alt="Foto da viagem">
+            </div>
+        </div>
+        
+        <div class="container left">
+            <div class="content">
+                <span class="data">Nossa primeira virada de ano juntos</span>
+                <h2>Feliz ano novo!!!!</h2>
+                <p>Primeira vez que passamos uma virada de ano juntos. Depois de passar o natal longe um do outro, foi inegociável passar a virada longe também. Esse dia foi muito especial. Apesar da gente não ter comido nada, que para mim foi um pecado, foi um dia muito bom.</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.52.jpeg" alt="Foto especial">
+            </div>
+        </div>
+        
+        <div class="container right">
+            <div class="content">
+                <span class="data">First Valentine's Day</span>
+                <h2>Nosso primeiro 12/06 juntos!!!</h2>
+                <p>Nosso primeiro tão sonhado dia dos namorados!!! Nesse dia fomos ao candlelight especial de dia dos namorados. Foi um dia incrivel ao seu lado, e dia do inexquecivel "Olha, amor. É pra se lambuzar!" "TÔ VENDO 😤😤😤😤" </p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.51 (1).jpeg" alt="Foto da viagem">
+            </div>
+        </div>
+        
+        <div class="container left">
+            <div class="content">
+                <span class="data">Nosso 1 ano</span>
+                <h2>Dia que fizemos 1 ano juntos</h2>
+                <p>Dia 12/08/24 tivemos os nossos primeiros 365 dias juntos. Cara, 1 ano juntos?? Passou tão rápido, e hoje em dia nem acredito que já vamos fazer 3 ANOS, meu Deus... Todos os dias eu sempre tive a certeza que te amava, mas naquele dia, passou um ano inteiro na minha mente, e eu me apaixonei como na primeira vez.</p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.38.51.jpeg" alt="Foto especial">
+            </div>
+        </div>
+        
+        <div class="container right">
+            <div class="content">
+                <span class="data">Início do nosso futuro</span>
+                <h2>Nós bifederais muito lindos juntos</h2>
+                <p>Dia que nos tornamos bifederais juntos. UF'srs e IF'ers juntinhos. Esse dia foi mais que uma conquista, foi um sonho realizado juntos, uma resposta para nossas orações. Toda a ansiedade, choro e desespero se tornou em lagrimas de alegria, o sonho do hexa federal foi real!!!!! </p>
+                <img src="fotos/WhatsApp Image 2026-06-11 at 19.41.05.jpeg" alt="Foto da viagem">
+            </div>
+        </div>
+    </div>
+
+    <div class="final-message-container">
+        <div class="final-message-content">
+            <h2>Para minha Gigi...</h2>
+            
+            <p>Esse é apenas um pedacinho diante de tudo o que já vivemos, e não chega a ser nem 1% da grandiosidade do que ainda vamos viver. Já passamos por tanta coisa, e até aqui, sempre fomos o porto seguro um do outro, e sempre será assim. Acredito fielmente na linha vermelha que conecta a gente. Tenho a absoluta certeza de que nascemos um para o outro. Desde a primeira dança, com aquele molejo estranho, eu sei que te amo. Jamais me cansarei de te dizer isso, EU TE AMO, infinitamente. Que todos os dias sejam nossos, porque a minha história só faz sentido se for escrita com você, meu bem ❤️.</p>
+            
+        
+            
+            <p class="assinatura">Com amor, Gugu</p>
+        </div>
+    </div>
+
+    <script>
+        // Script atualizado para animar a linha do tempo E a carta final
+        const elementosAnimados = document.querySelectorAll('.container, .final-message-container');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        elementosAnimados.forEach(elemento => {
+            observer.observe(elemento);
+        });
+    </script>
+</body>
+</html>
